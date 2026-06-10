@@ -1,89 +1,159 @@
-Msty Claw 0.9.0: What This Release Is Really About
+# Msty Blog Post Writer
 
+## Scope
+1. Work on Msty blog content under `content/blog`.
+2. Match tone and structure in existing blog posts.
+3. Return publish-ready markdown unless the user requests outline-only output.
 
-We built Msty Claw for people who want an AI assistant that can work with real files, real chats, and real tasks without getting in the way. It is a local-first desktop app meant to help people get useful work done faster, while keeping control close to the user.
+## Before Writing
+1. Identify post type: `product update`, `how-to/tutorial`, `thought leadership`, or `announcement`.
+2. Read 2-3 similar posts in `content/blog` and mirror pacing, heading style, and depth.
+3. Confirm required inputs: topic/title, author, publish date, audience, CTA.
+4. If source material is provided (copy/paste, doc, pdf, transcript), extract key facts first and preserve factual claims.
 
-Version 0.8.0 helped lay the groundwork for that direction. It strengthened the core experience and set the stage for the bigger changes that arrived in 0.9.0.
+## File and Slug Rules
+1. New post path must be `content/blog/<slug>.md`.
+2. Use lowercase kebab-case for `<slug>`.
+3. Avoid spaces, uppercase, and numeric prefixes for new posts.
+4. Keep slug stable unless the user explicitly asks to rename it.
 
-With 0.9.0, we focused on three things that matter in daily use: clearer insight, stronger automation, and better local document handling. If you are new to Msty Claw, this release is a good snapshot of what the app is becoming.
-It is more useful for people already working in the app, and easier to understand for people who are just getting started.
+## Frontmatter Standard
+1. Use this key order:
 
-Better visibility into usage
+```yaml
+---
+title: <Post Title
 
-One of the biggest additions in 0.9.0 is the new usage stats board.
+>
+description: <One-sentence summary
 
-It gives you a clear view of how the app is being used over time. You can see:
+>
+date: YYYYMMDD
+author: <Author Name
 
+>
+image: /blog/<asset-folder>/<hero-image-file
 
-- total token usage
-- input and output token counts
-- tool usage
-- failed tool calls
-- daily activity trends
+>
+tags: [tag-one, tag-two]
+# optional:
+# ogImage: /blog/<asset-folder>/<og-image-file
 
-You can also filter the data by provider or model and group it in different ways. That makes it easier to see which model is used most, where token usage comes from, and how activity changes over time.
+>
+---
+```
 
-The heatmap view is useful because it turns a long history into something you can scan quickly. Instead of reading through a raw list, you can spot patterns at a glance.
+2. `date` must be 8 digits in `YYYYMMDD`.
+3. Include `author`.
+4. Include `tags` as an array (`tags: []` if none).
+5. Keep `description` concise and specific.
+6. If hero image is not ready, keep `image:` present and list it in `Needed to publish`.
+7. Use `ogImage` only when needed.
 
-Folder changes can now drive work
+## Body Structure Standard
+1. Do not add an H1 in the body; the title comes from frontmatter.
+2. Start with 1-3 short paragraphs explaining scope and value.
+3. Use clear H2 sections (`##`) with outcome-focused headings.
+4. Keep paragraphs short and scannable.
+5. End with a conclusion or next-step CTA.
 
-0.9.0 also adds folder change triggers for tasks and playbooks.
+## Tone Standard
+1. Write in Msty voice: direct, practical, privacy-forward, technically credible.
+2. Explain workflow impact before deep implementation detail.
+3. Prefer concrete claims over hype.
+4. Keep language clear for both technical and non-technical readers.
 
-This means a task or playbook can run when files in a chosen folder change. It is a useful step beyond scheduled runs because it lets Msty Claw react to work as it happens.
+## Media Rules
 
-You can choose:
+### YouTube
+1. If a YouTube URL is provided, add an embed near the top unless asked otherwise:
 
+```md
+## Video Guide
 
-- the folder to watch
-- which file types should count
-- which change types should trigger a run
-- how long the app should wait before firing
-- how much quiet time should pass before another run
+::youtube-player{videoId="VIDEO_ID"}
+::
+```
 
-In practice, that makes the app better for document workflows, note cleanup, file-based review loops, and other repeated jobs where new or edited files should kick off action automatically.
+2. Extract `VIDEO_ID` from:
+```text
+https://www.youtube.com/watch?v=VIDEO_ID
+https://youtu.be/VIDEO_ID
+https://www.youtube.com/shorts/VIDEO_ID
+```
 
-This feature is careful about noise too. Common system and build folders are ignored, so the app stays focused on real work instead of background clutter.
+3. Keep plain YouTube links only when needed in a resources section.
 
-Local files are easier to work with
+### Images
+1. Prefer this component for in-post visuals:
 
-Another important addition in 0.9.0 is the local document parsing tool.
+```md
+::blog_image
+---
+src: /blog/<asset-folder>/<file-name>.png
+alt: <Accessible description
 
-This gives Msty Claw a direct way to read files from your local workspace and turn them into something the assistant can work with. It can extract text, return structured output, and save page screenshots when needed.
+>
+caption: <Optional caption
 
-It is especially useful for:
+>
+---
+::
+```
 
+2. `alt` is required.
+3. `caption` is optional but recommended for explanatory screenshots/charts.
+4. Markdown image syntax is allowed when explicitly requested or when matching existing nearby style.
 
-- PDFs
-- scanned documents
-- files that need OCR
-- document review tasks
-- turning local content into something the assistant can summarize or inspect
+### Non-YouTube Video
+1. For hosted MP4 video, use:
 
-That matters because it keeps the workflow local and practical. Instead of moving between tools or copying content by hand, you can point the app at a document and let it do the reading. For people working with reports, notes, forms, or reference material, that saves time and reduces friction.
+```md
+::blog_video
+---
+src: https://...
+alt: <Accessible description
 
-More polish across the app
+>
+caption: <Caption
 
-0.9.0 is not only about the headline features. It also tightens a lot of everyday behavior.
+>
+---
+::
+```
 
-The update includes better app update controls, clearer sign-in and sync progress, improved sidebar keyboard navigation, and a cleaner setup and settings experience. It also improves PDF handling, including OCR cleanup and orientation support, so document work is more reliable.
+## Asset Placement Rules
+1. Store new assets in `public/blog/<asset-folder>/`.
+2. Use a folder name based on the slug or a short readable variant.
+3. Use lowercase kebab-case filenames.
+4. Reference assets in posts as `/blog/<asset-folder>/<filename>`.
+5. If the user supplies images, move/copy them into that folder before finalizing links.
 
-A number of bugs were fixed too:
+## Source-to-Post Workflow
+1. Extract facts, claims, and chronology from source material.
+2. Rewrite for clarity and flow without changing factual meaning.
+3. Remove redundancy and tighten structure.
+4. Ask only blocking questions when critical publish inputs are missing.
+5. Deliver a full publish-ready draft unless outline-only is requested.
 
+## Drafting Workflow
+1. If title is not final, propose 3 title options.
+2. Produce full markdown with normalized frontmatter and structure.
+3. Add embeds/components for provided media links/assets.
+4. Match repository conventions.
 
-- refresh behavior is clearer
-- folder selection works better
-- scheduled tasks are more stable
-- the rules view is cleaner
-- usage stats now read more clearly on smaller screens
+## Final Validation Checklist
+1. Path matches `content/blog/<slug>.md`.
+2. Frontmatter has valid `title`, `description`, `date`, `author`, `image`, and `tags`.
+3. `date` format is valid `YYYYMMDD`.
+4. Body has no H1.
+5. Any provided YouTube URL has a matching `::youtube-player` embed.
+6. All `/blog/...` references resolve to files under `public/blog/...`.
+7. Tone and structure align with current Msty blog posts.
+8. Spelling, grammar, and links are clean.
 
-These changes may not be the biggest headline features, but they improve how the app behaves in actual use and make the whole experience feel more finished.
-
-Why 0.9.0 matters
-
-Msty Claw 0.9.0 pushes the app in a more complete direction.
-
-It gives users better visibility into what the app is doing, gives tasks and playbooks a smarter trigger model, and makes local document work much more useful. At the same time, it smooths out a lot of the rough edges that get in the way of daily use.
-
-If you already use Msty Claw, this release gives you more control and better feedback. If you are new to it, 0.9.0 shows what the app is for: a local-first assistant that can work with your files, your workflows, and your tools without getting in the way.
-
-Update to 0.9.0 and try the new usage stats board, folder triggers, and local document parsing for yourself.
+## Output Contract
+1. Return full markdown post content.
+2. Return recommended file path: `content/blog/<slug>.md`.
+3. Return required asset folder path: `public/blog/<asset-folder>/`.
+4. If anything is missing, end with a short `Needed to publish` list.
